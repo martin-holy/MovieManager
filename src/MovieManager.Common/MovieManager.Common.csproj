@@ -19,8 +19,8 @@
     <ProjectReference Include="..\..\..\..\libs\MH\Common\MH.UI\MH.UI.csproj">
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\libs\MH\Common\MH.Utils\MH.Utils.csproj">
-      <Private>false</Private>
+    <ProjectReference Include="..\..\..\..\..\MH.Utils\src\MH.Utils\MH.Utils.csproj">
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\PictureManager.Common\PictureManager.Common.csproj">
       <Private>False</Private>
