@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\libs\MH\Windows\WPF\MH.UI.WPF\MH.UI.WPF.csproj">
+    <ProjectReference Include="..\..\..\..\..\MH.UI.WPF\src\MH.UI.WPF\MH.UI.WPF.csproj">
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MovieManager.Common\MovieManager.Common.csproj">
