@@ -16,13 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\MH.UI\src\MH.UI\MH.UI.csproj" >
+    <ProjectReference Include="..\..\..\MH.UI\src\MH.UI\MH.UI.csproj" >
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\MH.Utils\src\MH.Utils\MH.Utils.csproj">
+    <ProjectReference Include="..\..\..\MH.Utils\src\MH.Utils\MH.Utils.csproj">
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\src\PictureManager.Common\PictureManager.Common.csproj">
+    <ProjectReference Include="..\..\..\PictureManager\src\PictureManager.Common\PictureManager.Common.csproj">
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\plugins\src\MovieManager.Plugins.Common\MovieManager.Plugins.Common.csproj">
