@@ -19,7 +19,7 @@ public class Core : IIMDbPlugin {
 
   public async Task<SearchResult[]> SearchMovie(string query, CancellationToken token) {
     var url = $"https://v2.sg.media-imdb.com/suggestion/h/{query.Replace(' ', '+')}.json";
-    var content = await Common.Core.GetWebPageContent(url, token);
+    var content = await Net.GetWebPageContent(url, token);
     if (string.IsNullOrEmpty(content)) return [];
 
     try {
@@ -34,7 +34,7 @@ public class Core : IIMDbPlugin {
   public async Task<MovieDetail?> GetMovieDetail(DetailId id, CancellationToken token) {
     if (!id.Name.Equals(IdName)) return null;
     var url = $"https://www.imdb.com/title/{id.Id}";
-    var content = await Common.Core.GetWebPageContent(url, token);
+    var content = await Net.GetWebPageContent(url, token);
     if (string.IsNullOrEmpty(content)) return null;
     if (_srMovieDetailJson.From(content, 0)?.AsString(content) is not { } jsonText) return null;
 

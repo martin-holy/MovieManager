@@ -114,7 +114,7 @@ public class ImportS {
     var filePath = Path.Combine(folder.FullPath, fileName);
     try {
       if (!Path.Exists(filePath))
-        await Plugins.Common.Core.DownloadAndSaveFile(image.Url, filePath);
+        await Net.DownloadAndSaveFile(image.Url, filePath);
 
       return _coreS.PMCoreS.MediaItem.GetMediaItem(folder, fileName);
     }
