@@ -36,16 +36,16 @@ public static class Parser {
     { 125, "Trick" }, { 124, "Artistic" }, { 165, "Entertaining" }, { 92, "Living Pictures" }
   };
 
+  private const string _searchStart = "id=\"hle_film";
   private const string _detailStart = "zakladni_info";
   private const string _castStart = ">hraje:<";
-  private const string _classVbox = "class=\"v_box\"";
   private const string _classInfo = "class=\"info\"";
-  
-  private static readonly StringRange _srSearch = new("id=\"hle_film");
+
+  private static readonly StringRange _srSearchClassVbox = new("class=\"v_box\"");
   private static readonly StringRange _srSearchA = new("<a", "</a");
   private static readonly StringRange _srSearchImage = new("rel=\"", "\"");
   private static readonly StringRange _srSearchDetailId = new("href=", "film/", "\"");
-  private static readonly StringRange _srSearchName = new(">");
+  private static readonly StringRange _srSearchName = new(">", "<");
   private static readonly StringRange _srSearchYearAndType = new("<span", ">", "<");
   private static readonly StringRange _srSearchYear = new("(", ")");
   private static readonly StringRange _srSearchType = new("[", "]");
@@ -70,38 +70,34 @@ public static class Parser {
   public static SearchResult[] ParseSearch(string text) {
     var idx = 0;
 
-    return _srSearch.From(text, ref idx)?
-      .AsEnumerable(() => ParseSearchResult(text, ref idx))
-      .Where(x => x != null)
-      .Select(x => x!)
-      .ToArray() ?? [];
+    return !text.TryIndexOf(_searchStart, ref idx)
+      ? []
+      : _srSearchClassVbox.AsEnumerable(text, idx, _parseSearchResult).ToArray();
   }
 
-  private static SearchResult? ParseSearchResult(string text, ref int idx) {
-    if (!text.TryIndexOf(_classVbox, ref idx)
-        || !text.TryIndexOf(_classInfo, ref idx)) return null;
-
-    var sr = new SearchResult();
-
-    if (_srSearchA.Found(text, idx)) {
-      if (_srSearchImage.From(text, _srSearchA)?.AsString(text) is { } imgUrl)
-        sr.Image = new(imgUrl);
-
-      if (MovieDetailIdFromUrl(_srSearchDetailId.From(text, _srSearchA)?.AsString(text)) is not { } detailId)
-        return null;
-
-      sr.DetailId = detailId;
-      sr.Name = _srSearchName.From(text, _srSearchA)?.AsString(text);
-    }
-    else
+  private static SearchResult? _parseSearchResult(string text, StringRange range, out int rangeEnd) {
+    var idx = range.Start;
+    rangeEnd = idx;
+    if (!text.TryIndexOf(_classInfo, ref idx)
+        || !_srSearchA.Found(text, idx)
+        || MovieDetailIdFromUrl(_srSearchDetailId.From(text, _srSearchA)?.AsString(text)) is not { } detailId)
       return null;
 
-    if (_srSearchYearAndType.From(text, ref idx) is { } yearType) {
+    var sr = new SearchResult {
+      DetailId = detailId,
+      Name = _srSearchName.From(text, _srSearchA)?.AsString(text)
+    };
+
+    if (_srSearchImage.From(text, _srSearchA)?.AsString(text) is { } imgUrl)
+      sr.Image = new(imgUrl);
+
+    if (_srSearchYearAndType.From(text, _srSearchA.End) is { } yearType) {
       sr.Year = _srSearchYear.From(text, yearType)?.AsInt32(text) ?? 0;
       sr.Type = _srSearchType.From(text, yearType)?.AsString(text);
     }
 
-    sr.Desc = _srSearchDesc.From(text, idx)?.AsString(text).Replace("<br/>", " ");
+    sr.Desc = _srSearchDesc.From(text, _srSearchA.End)?.AsString(text).Replace("<br/>", " ");
+    rangeEnd = _srSearchA.End;
 
     return sr;
   }
