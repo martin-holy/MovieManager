@@ -104,6 +104,7 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
   }
 
   private void OnMoviesKeywordsChanged(object? sender, MovieM[] items) {
+    Movies?.Update(items);
     MovieDetail?.UpdateDisplayKeywordsIfContains(items);
   }
 
