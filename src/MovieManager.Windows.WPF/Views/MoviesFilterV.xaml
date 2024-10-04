@@ -80,6 +80,9 @@
             SelectedValue="{Binding LastSeenType, Mode=TwoWay}"/>
 
           <TextBlock Text="ago." VerticalAlignment="Bottom" Margin="4"/>
+
+          <TextBlock Text="Not seen:" VerticalAlignment="Bottom" Margin="8,4,4,4"/>
+          <CheckBox IsChecked="{Binding NotSeen}" VerticalAlignment="Bottom" Margin="4"/>
         </StackPanel>
 
         <TextBlock Text="Year:" Grid.Row="2" Grid.Column="0" Style="{StaticResource _label}"/>

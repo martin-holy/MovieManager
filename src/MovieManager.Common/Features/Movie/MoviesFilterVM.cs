@@ -15,6 +15,7 @@ public sealed class MoviesFilterVM : ObservableObject {
   private int _lastSeen;
   private LastSeenType _lastSeenType = LastSeenType.Years;
   private int _lastSeenDays;
+  private bool _notSeen;
 
   public static KeyValuePair<LastSeenType, string>[] LastSeenTypes { get; } = [
     new(LastSeenType.Days, "Days"),
@@ -26,6 +27,7 @@ public sealed class MoviesFilterVM : ObservableObject {
   public string Title { get => _title; set { _title = value; OnPropertyChanged(); RaiseFilterChanged(); } }
   public int LastSeen { get => _lastSeen; set { _lastSeen = value; OnPropertyChanged(); OnLastSeenChanged(); } }
   public LastSeenType LastSeenType { get => _lastSeenType; set { _lastSeenType = value; OnPropertyChanged(); OnLastSeenChanged(); } }
+  public bool NotSeen { get => _notSeen; set { _notSeen = value; OnPropertyChanged(); RaiseFilterChanged(); } }
   public SelectionRange Year { get; } = new();
   public SelectionRange Length { get; } = new();
   public SelectionRange Rating { get; } = new();
@@ -103,7 +105,9 @@ public sealed class MoviesFilterVM : ObservableObject {
   public bool Filter(MovieM movie) {
     if (!string.IsNullOrEmpty(Title) && !movie.Title.Contains(Title, StringComparison.CurrentCultureIgnoreCase)) return false;
 
-    if (_lastSeenDays > 0 && movie.Seen.Count > 0 && movie.Seen.LastOrDefault() is var lastSeen
+    if (_notSeen && movie.Seen.Count > 0) return false;
+
+    if (!_notSeen && _lastSeenDays > 0 && movie.Seen.Count > 0 && movie.Seen.LastOrDefault() is var lastSeen
         && (DateTime.Today - lastSeen.ToDateTime(TimeOnly.MinValue)).TotalDays < _lastSeenDays)
       return false;
 
