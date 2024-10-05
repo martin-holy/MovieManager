@@ -1,4 +1,5 @@
-﻿using MH.Utils.BaseClasses;
+﻿using MH.UI.Interfaces;
+using MH.Utils.BaseClasses;
 using MovieManager.Common.Features.Genre;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace MovieManager.Common.Features.Movie;
 
 public enum LastSeenType { Days, Weeks, Months, Years }
 
-public sealed class MoviesFilterVM : ObservableObject {
+public sealed class MoviesFilterVM : ObservableObject, ICollectionViewFilter<MovieM> {
   private bool _clearing;
   private string _title = string.Empty;
   private int _lastSeen;

@@ -152,24 +152,16 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
 
   private void OpenMovies() {
     Movies ??= new();
-    Movies.Open(MoviesFilter == null
-      ? _coreR.Movie.All
-      : _coreR.Movie.All.Where(MoviesFilter.Filter));
+    Movies.SetFilter(MoviesFilter);
+    Movies.Open(_coreR.Movie.All);
     PMCoreVM.MainTabs.Activate(MH.UI.Res.IconMovieClapper, "Movies", Movies);
   }
 
   private void OpenMoviesFilter() {
-    if (MoviesFilter == null) {
-      MoviesFilter = new();
-      MoviesFilter.FilterChangedEvent += OnMoviesFilterChanged;
-    }
-
+    MoviesFilter ??= new();
     MoviesFilter.Update(_coreR.Movie.All, _coreR.Genre.All);
     PMCoreVM.ToolsTabs.Activate(PM.Res.IconFilter, "Movies filter", MoviesFilter);
-  }
-
-  private void OnMoviesFilterChanged(object? sender, EventArgs e) {
-    Movies?.Open(_coreR.Movie.All.Where(MoviesFilter!.Filter));
+    Movies?.SetFilter(MoviesFilter);
   }
 
   public void OpenMovieDetail(MovieM? movie) {
