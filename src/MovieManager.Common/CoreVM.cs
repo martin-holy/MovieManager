@@ -53,7 +53,7 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
     OpenMoviesCommand = new(OpenMovies, MH.UI.Res.IconMovieClapper, "Movies");
     OpenMoviesFilterCommand = new(OpenMoviesFilter, PM.Res.IconFilter, "Movies filter");
     SaveDbCommand = new(() => _coreR.SaveAllTables(), () => _coreR.Changes > 0, PM.Res.IconDatabase, "Save changes");
-    ScrollToRootFolderCommand = new(() => _coreR.PMCoreR.Folder.Tree.ScrollTo(_coreR.RootFolder), PM.Res.IconFolder, "Scroll to root folder");
+    ScrollToRootFolderCommand = new(() => _coreR.PMCoreR.Folder.Tree.Category.ScrollTo(_coreR.RootFolder), PM.Res.IconFolder, "Scroll to root folder");
 
     MainMenuCommands = [
       DeleteSelectedMoviesCommand,
