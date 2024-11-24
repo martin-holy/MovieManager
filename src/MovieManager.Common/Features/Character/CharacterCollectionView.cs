@@ -16,10 +16,10 @@ public class CharacterCollectionView() : CollectionView<CharacterM>(PM.Res.IconP
   public override int SortCompare(CharacterM itemA, CharacterM itemB) =>
     string.Compare(itemA.Name, itemB.Name, StringComparison.CurrentCultureIgnoreCase);
 
-  public override void OnItemSelected(SelectionEventArgs<CharacterM> e) =>
+  protected override void _onItemSelected(SelectionEventArgs<CharacterM> e) =>
     Core.S.Character.Select(e);
 
-  public override void OnItemOpened(CharacterM item) {
+  protected override void _onItemOpened(CharacterM item) {
     if (item.Actor.Image != null)
       Core.VM.PMCoreVM.OpenMediaItems(null, item.Actor.Image);
   }
