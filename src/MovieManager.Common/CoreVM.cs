@@ -112,12 +112,12 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
     Movies?.ReWrapAll();
   }
 
-  private void OnMainTabsTabClosed(IListItem tab) {
+  private void OnMainTabsTabClosed(object? sender, IListItem tab) {
     if (tab.Data is MoviesVM)
       _coreS.Movie.Selected.DeselectAll();
   }
 
-  private void OnToolsTabsTabClosed(IListItem tab) {
+  private void OnToolsTabsTabClosed(object? sender, IListItem tab) {
     if (tab.Data is MovieDetailVM) {
       _coreS.Actor.Selected.DeselectAll();
       _coreS.Character.Selected.DeselectAll();
