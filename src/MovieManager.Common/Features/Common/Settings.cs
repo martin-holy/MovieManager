@@ -21,7 +21,7 @@ public sealed class Settings : UserSettings {
       new(Res.IconImport, "Import", import)
     ];
 
-    WatchForChanges();
+    _watchForChanges();
   }
 
   public static Settings Load(string filePath) {
