@@ -54,7 +54,6 @@ public class ImportVM : ObservableObject {
     _isImportInProgress = false;
     Progress.Report(string.Empty);
     await SearchQueue(SearchCommand.CancelCommand.Token);
-    RelayCommandBase.RaiseCanExecuteChanged();
   }
 
   private async Task SearchQueue(CancellationToken token) {
