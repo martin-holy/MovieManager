@@ -11,10 +11,10 @@ namespace MovieManager.Common.Features.Character;
 /// DB fields: Id|Name|Actor|Movie|Segment
 /// </summary>
 public class CharacterR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<CharacterM>(coreR, "Characters", 5) {
-  public override CharacterM FromCsv(string[] csv) =>
+  protected override CharacterM _fromCsv(string[] csv) =>
     new(int.Parse(csv[0]), csv[1], ActorR.Dummy, MovieR.Dummy);
 
-  public override string ToCsv(CharacterM item) =>
+  protected override string _toCsv(CharacterM item) =>
     string.Join("|",
       item.GetHashCode().ToString(),
       item.Name,

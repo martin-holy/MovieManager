@@ -14,10 +14,10 @@ public class ActorR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<ActorM>(co
   public static ActorM Dummy { get; } = new(0, string.Empty);
   public event EventHandler<ActorM> ActorPersonChangedEvent = delegate { };
 
-  public override ActorM FromCsv(string[] csv) =>
+  protected override ActorM _fromCsv(string[] csv) =>
     new(int.Parse(csv[0]), csv[1]);
 
-  public override string ToCsv(ActorM item) =>
+  protected override string _toCsv(ActorM item) =>
     string.Join("|",
       item.GetHashCode().ToString(),
       item.Name,

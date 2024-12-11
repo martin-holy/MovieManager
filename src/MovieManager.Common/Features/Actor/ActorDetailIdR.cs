@@ -8,10 +8,10 @@ namespace MovieManager.Common.Features.Actor;
 /// DB fields: Id|DetailId|DetailName|Actor
 /// </summary>
 public sealed class ActorDetailIdR(CoreR coreR) : TableDataAdapter<ActorDetailIdM>(coreR, "ActorDetailIds", 4) {
-  public override ActorDetailIdM FromCsv(string[] csv) =>
+  protected override ActorDetailIdM _fromCsv(string[] csv) =>
     new(int.Parse(csv[0]), csv[1], csv[2], ActorR.Dummy);
 
-  public override string ToCsv(ActorDetailIdM item) =>
+  protected override string _toCsv(ActorDetailIdM item) =>
     string.Join("|",
       item.GetHashCode().ToString(),
       item.DetailId,

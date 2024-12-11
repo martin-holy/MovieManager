@@ -8,10 +8,10 @@ namespace MovieManager.Common.Features.Genre;
 /// DB fields: Id|Name
 /// </summary>
 public sealed class GenreR(CoreR coreR) : TableDataAdapter<GenreM>(coreR, "Genres", 2) {
-  public override GenreM FromCsv(string[] csv) =>
+  protected override GenreM _fromCsv(string[] csv) =>
     new(int.Parse(csv[0]), csv[1]);
 
-  public override string ToCsv(GenreM item) =>
+  protected override string _toCsv(GenreM item) =>
     string.Join("|", item.GetHashCode().ToString(), item.Name);
 
   public GenreM? GetGenre(string name, bool create) =>

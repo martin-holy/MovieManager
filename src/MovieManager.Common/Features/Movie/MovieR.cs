@@ -20,7 +20,7 @@ public sealed class MovieR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<Mov
   public event EventHandler<MovieM[]> MoviesKeywordsChangedEvent = delegate { };
   public event EventHandler<MovieM> PosterChangedEvent = delegate { };
 
-  public override MovieM FromCsv(string[] csv) =>
+  protected override MovieM _fromCsv(string[] csv) =>
     new(int.Parse(csv[0]), csv[1]) {
       Year = csv[2].IntParseOrDefault(0),
       YearEnd = string.IsNullOrEmpty(csv[3]) ? null : int.Parse(csv[3]),
@@ -32,7 +32,7 @@ public sealed class MovieR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<Mov
       Plot = string.IsNullOrEmpty(csv[13]) ? null : csv[13]
     };
 
-  public override string ToCsv(MovieM item) =>
+  protected override string _toCsv(MovieM item) =>
     string.Join("|",
       item.GetHashCode().ToString(),
       item.Title,
