@@ -23,7 +23,7 @@ public class CharacterR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<Charac
       item.Segment?.GetHashCode().ToString());
 
   public override void LinkReferences() {
-    foreach (var (item, csv) in AllCsv) {
+    foreach (var (item, csv) in _allCsv) {
       item.Actor = coreR.Actor.GetById(csv[2])!;
       item.Movie = coreR.Movie.GetById(csv[3])!;
       item.Segment = pmCoreR.Segment.GetById(csv[4], true);

@@ -50,7 +50,7 @@ public sealed class MovieR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<Mov
       item.Plot);
 
   public override void LinkReferences() {
-    foreach (var (item, csv) in AllCsv) {
+    foreach (var (item, csv) in _allCsv) {
       item.Genres = coreR.Genre.LinkList(csv[7], null, this) ?? [];
       item.Poster = pmCoreR.MediaItem.GetById(csv[10], true);
       item.MediaItems = pmCoreR.MediaItem.Link(csv[11]);

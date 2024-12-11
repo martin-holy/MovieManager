@@ -25,7 +25,7 @@ public class ActorR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<ActorM>(co
       item.Image?.GetHashCode().ToString());
 
   public override void LinkReferences() {
-    foreach (var (item, csv) in AllCsv) {
+    foreach (var (item, csv) in _allCsv) {
       item.Person = pmCoreR.Person.GetById(csv[2], true);
       item.Image = pmCoreR.MediaItem.GetById(csv[3], true);
     }

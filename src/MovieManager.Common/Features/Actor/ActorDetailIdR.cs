@@ -19,7 +19,7 @@ public sealed class ActorDetailIdR(CoreR coreR) : TableDataAdapter<ActorDetailId
       item.Actor.GetHashCode().ToString());
 
   public override void LinkReferences() {
-    foreach (var (item, csv) in AllCsv) {
+    foreach (var (item, csv) in _allCsv) {
       item.Actor = coreR.Actor.GetById(csv[3])!;
       item.Actor.DetailId = item;
     }
