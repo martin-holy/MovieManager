@@ -1,5 +1,5 @@
 ﻿using MH.Utils;
-using MH.Utils.BaseClasses;
+using MH.Utils.EventsArgs;
 
 namespace MovieManager.Common.Features.Character;
 
