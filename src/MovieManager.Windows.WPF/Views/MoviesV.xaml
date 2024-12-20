@@ -5,7 +5,7 @@
   xmlns:ftMovie="clr-namespace:MovieManager.Common.Features.Movie;assembly=MovieManager.Common">
 
   <DataTemplate DataType="{x:Type ftMovie:MoviesVM}">
-    <mhc:CollectionView View="{Binding}">
+    <mhc:CollectionView ViewModel="{Binding}">
       <mhc:CollectionView.ItemsPanel>
         <ItemsPanelTemplate>
           <mhc:VirtualizingSingleItemScrollStackPanel/>

@@ -229,7 +229,7 @@
       </ScrollViewer>
 
       <!-- Characters -->
-      <c:CollectionView Grid.Row="5" View="{Binding Characters}"/>
+      <c:CollectionView Grid.Row="5" ViewModel="{Binding Characters}"/>
     </Grid>
 
     <DataTemplate.Triggers>
