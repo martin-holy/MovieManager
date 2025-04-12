@@ -10,9 +10,11 @@ using MovieManager.Common.Features.Movie;
 using PictureManager.Common.Features.Keyword;
 using PictureManager.Common.Features.Person;
 using PictureManager.Common.Interfaces.Plugin;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using PM = PictureManager.Common;
 
 namespace MovieManager.Common;
@@ -30,9 +32,9 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
   public MovieDetailVM? MovieDetail { get; private set; }
   public MoviesFilterVM? MoviesFilter { get; private set; }
 
-  public List<RelayCommand> MainMenuCommands { get; }
+  public List<ICommand> MainMenuCommands { get; }
 
-  public RelayCommand DeleteSelectedMoviesCommand { get; }
+  public AsyncRelayCommand DeleteSelectedMoviesCommand { get; }
   public RelayCommand ImportMoviesCommand { get; }
   public RelayCommand OpenMoviesCommand { get; }
   public RelayCommand OpenMoviesFilterCommand { get; }
@@ -44,7 +46,7 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
     _coreS = coreS;
     _coreR = coreR;
 
-    pmCoreVM.AppClosingEvent += OnAppClosing;
+    pmCoreVM.AppClosingEvent += (o, e) => _ = OnAppClosing(); 
 
     InitToggleDialog();
 
@@ -124,9 +126,9 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
     }
   }
 
-  private void OnAppClosing(object? sender, EventArgs e) {
+  private async Task OnAppClosing() {
     if (_coreR.Changes > 0 &&
-        Dialog.Show(new MessageDialog(
+        await Dialog.ShowAsync(new MessageDialog(
           "Database changes",
           "There are some changes in Movie Manager database.\nDo you want to save them?",
           PM.Res.IconDatabase,
@@ -136,8 +138,8 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
     _coreR.BackUp();
   }
 
-  private void DeleteSelectedMovies() {
-    if (Dialog.Show(new MessageDialog(
+  private async Task DeleteSelectedMovies(CancellationToken token) {
+    if (await Dialog.ShowAsync(new MessageDialog(
           "Delete Movies",
           "Do you really want to delete {0} Movie{1}?".Plural(_coreS.Movie.Selected.Items.Count),
           MH.UI.Res.IconMovieClapper,
