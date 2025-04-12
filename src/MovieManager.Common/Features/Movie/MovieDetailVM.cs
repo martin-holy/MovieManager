@@ -24,8 +24,8 @@ public sealed class MovieDetailVM : ObservableObject {
   public CharacterCollectionView Characters { get; } = new();
   public string LastSeenDate => MovieM.Seen.Count == 0 ? string.Empty : MovieM.Seen.Last().ToShortDateString();
 
-  public RelayCommand AddMediaItemsCommand { get; }
-  public RelayCommand RemoveMediaItemsCommand { get; }
+  public AsyncRelayCommand AddMediaItemsCommand { get; }
+  public AsyncRelayCommand RemoveMediaItemsCommand { get; }
   public AsyncRelayCommand ViewMediaItemsCommand { get; }
   public RelayCommand SetCharacterSegmentCommand { get; }
   public RelayCommand<ObservableCollection<DateTime>> AddSeenDateCommand { get; }
@@ -55,9 +55,9 @@ public sealed class MovieDetailVM : ObservableObject {
     Characters.Reload(charSource, GroupMode.ThenByRecursive, null, true);
   }
 
-  private void AddMediaItems() {
+  private async Task AddMediaItems(CancellationToken token) {
     var mis = _pmCoreVM.GetActive<MediaItemM>();
-    if (Dialog.Show(new MessageDialog(
+    if (await Dialog.ShowAsync(new MessageDialog(
           "Adding Media items to Movie",
           "Do you really want to add {0} Media item{1} to Movie?".Plural(mis.Length),
           Res.IconMovieClapper,
@@ -80,9 +80,9 @@ public sealed class MovieDetailVM : ObservableObject {
     return mis.Length > 0 && !ReferenceEquals(mis[0], MovieM.Poster);
   }
 
-  private void RemoveMediaItems() {
+  private async Task RemoveMediaItems(CancellationToken token) {
     var mis = _pmCoreVM.GetActive<MediaItemM>().Intersect(MovieM.MediaItems!).ToArray();
-    if (Dialog.Show(new MessageDialog(
+    if (await Dialog.ShowAsync(new MessageDialog(
           "Removing Media items from Movie",
           "Do you really want to remove {0} Media item{1} from Movie?".Plural(mis.Length),
           Res.IconMovieClapper,
