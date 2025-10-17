@@ -5,6 +5,7 @@ using PictureManager.Common;
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace MovieManager.Common.Features.Common;
 
@@ -29,13 +30,11 @@ public sealed class Settings : UserSettings {
     try {
       using var doc = JsonDocument.Parse(File.ReadAllText(filePath));
       var root = doc.RootElement;
+      var ctx = SettingsJsonContext.Default;
+      var common = DeserializeGroup(root, "Common", ctx.CommonSettings) ?? new();
+      var import = DeserializeGroup(root, "Import", ctx.ImportSettings) ?? new();
 
-      var common = DeserializeGroup<CommonSettings>(root, "Common") ?? new();
-      var import = DeserializeGroup<ImportSettings>(root, "Import") ?? new();
-
-      var settings = new Settings(filePath, common, import);
-
-      return settings;
+      return new Settings(filePath, common, import);
     }
     catch (Exception ex) {
       Log.Error(ex);
@@ -43,11 +42,17 @@ public sealed class Settings : UserSettings {
     }
   }
 
+  private static T? DeserializeGroup<T>(JsonElement root, string name, JsonTypeInfo<T> typeInfo) {
+    if (root.TryGetProperty(name, out var elm))
+      return JsonSerializer.Deserialize(elm.GetRawText(), typeInfo);
+    return default;
+  }
+
   private static Settings CreateNew(string filePath) =>
     new(filePath, new(), new());
 
-  protected override string Serialize(JsonSerializerOptions options) =>
-    JsonSerializer.Serialize(this, options);
+  protected override string Serialize() =>
+    JsonSerializer.Serialize(this, SettingsJsonContext.Default.Settings);
 }
 
 public sealed class CommonSettings : ObservableObject {
