@@ -9,6 +9,10 @@ using PM = PictureManager.Common;
 namespace MovieManager.Common.Features.Movie;
 
 public class MovieCollectionView() : CollectionView<MovieM>(MH.UI.Res.IconMovieClapper, "Movies", [ViewMode.ThumbBig]) {
+  private static readonly IReadOnlyList<SortField<MovieM>> _sortFields = [
+    new SortField<MovieM>("Title", x => x.Title, StringComparer.CurrentCultureIgnoreCase)
+  ];
+
   public override int GetItemSize(ViewMode viewMode, MovieM item, bool getWidth) {
     var scale = PM.Core.Settings.MediaItem.MediaItemThumbScale;
 
@@ -27,6 +31,8 @@ public class MovieCollectionView() : CollectionView<MovieM>(MH.UI.Res.IconMovieC
 
     return top;
   }
+
+  public override IEnumerable<SortField<MovieM>> GetSortFields() => _sortFields;
 
   public override int SortCompare(MovieM itemA, MovieM itemB) =>
     string.Compare(itemA.Title, itemB.Title, StringComparison.CurrentCultureIgnoreCase);

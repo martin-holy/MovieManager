@@ -8,10 +8,16 @@ using PM = PictureManager.Common;
 namespace MovieManager.Common.Features.Character;
 
 public class CharacterCollectionView() : CollectionView<CharacterM>(PM.Res.IconPeople, "Characters", [ViewMode.Tiles]) {
+  private static readonly IReadOnlyList<SortField<CharacterM>> _sortFields = [
+    new SortField<CharacterM>("Name", x => x.Name, StringComparer.CurrentCultureIgnoreCase)
+  ];
+
   public override IEnumerable<GroupByItem<CharacterM>> GetGroupByItems(IEnumerable<CharacterM> source) => [];
 
   public override int GetItemSize(ViewMode viewMode, CharacterM item, bool getWidth) =>
     getWidth ? 300 : SegmentVM.SegmentUiFullWidth;
+
+  public override IEnumerable<SortField<CharacterM>> GetSortFields() => _sortFields;
 
   public override int SortCompare(CharacterM itemA, CharacterM itemB) =>
     string.Compare(itemA.Name, itemB.Name, StringComparison.CurrentCultureIgnoreCase);
