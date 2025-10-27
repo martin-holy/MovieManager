@@ -7,10 +7,14 @@ using PM = PictureManager.Common;
 
 namespace MovieManager.Common.Features.Character;
 
-public class CharacterCollectionView() : CollectionView<CharacterM>(PM.Res.IconPeople, "Characters", [ViewMode.Tiles]) {
+public class CharacterCollectionView : CollectionView<CharacterM> {
   private static readonly IReadOnlyList<SortField<CharacterM>> _sortFields = [
     new SortField<CharacterM>("Name", x => x.Name, StringComparer.CurrentCultureIgnoreCase)
   ];
+
+  public CharacterCollectionView() : base(PM.Res.IconPeople, "Characters", [ViewMode.Tiles]) {
+    DefaultSortField = _sortFields[0];
+  }
 
   public override IEnumerable<GroupByItem<CharacterM>> GetGroupByItems(IEnumerable<CharacterM> source) => [];
 

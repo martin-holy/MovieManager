@@ -52,7 +52,7 @@ public sealed class MovieDetailVM : ObservableObject {
   public void Reload(MovieM movie) {
     MovieM = movie;
     var charSource = Core.R.Character.All.Where(x => ReferenceEquals(x.Movie, movie)).ToList();
-    Characters.Reload(charSource, GroupMode.ThenByRecursive, null, true);
+    Characters.Reload(charSource, GroupMode.ThenByRecursive, null, true, false);
   }
 
   private async Task AddMediaItems(CancellationToken token) {

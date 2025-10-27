@@ -155,7 +155,7 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
   private void OpenMovies() {
     Movies ??= new();
     Movies.SetFilter(MoviesFilter);
-    Movies.Open(_coreR.Movie.All);
+    Movies.Open([.. _coreR.Movie.All]);
     PMCoreVM.MainTabs.Activate(MH.UI.Res.IconMovieClapper, "Movies", Movies);
   }
 

@@ -5,12 +5,10 @@ using System.Linq;
 namespace MovieManager.Common.Features.Movie;
 
 public sealed class MoviesVM : MovieCollectionView {
-  public void Open(IEnumerable<MovieM> items) {
-    var source = items.OrderBy(x => x.Title).ToList();
-
-    foreach (var movie in source.Where(x => x.Poster != null))
+  public void Open(List<MovieM> items) {
+    foreach (var movie in items.Where(x => x.Poster != null))
       movie.Poster!.SetThumbSize();
 
-    Reload(source, GroupMode.ThenByRecursive, null, true);
+    Reload(items, GroupMode.ThenByRecursive, null, true, true);
   }
 }
