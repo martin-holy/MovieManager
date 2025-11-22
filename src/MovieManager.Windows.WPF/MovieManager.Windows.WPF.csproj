@@ -4,22 +4,27 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
+
+		<Authors>Martin Holý</Authors>
+		<Company>Martin Holý</Company>
+		<Copyright>Martin Holý</Copyright>
+
+		<Version>1.4.0</Version>
+		<AssemblyVersion>1.4.0.0</AssemblyVersion>
+		<FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <Version>$(CurrentDateTimeVersion)</Version>
-    <AssemblyVersion>$(CurrentDateTimeVersion)</AssemblyVersion>
-    <FileVersion>$(CurrentDateTimeVersion)</FileVersion>
-  </PropertyGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Release'">
+		<PackageReference Include="MH.UI.WPF" Version="3.0.0" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <Authors>Martin Holý</Authors>
-  </PropertyGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Debug'">
+		<ProjectReference Include="..\..\..\MH.UI.WPF\src\MH.UI.WPF\MH.UI.WPF.csproj">
+			<Private>False</Private>
+		</ProjectReference>
+	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MH.UI.WPF\src\MH.UI.WPF\MH.UI.WPF.csproj">
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\MovieManager.Common\MovieManager.Common.csproj">
       <Private>False</Private>
     </ProjectReference>
