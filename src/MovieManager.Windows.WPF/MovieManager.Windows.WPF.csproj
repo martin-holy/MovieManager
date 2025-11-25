@@ -15,7 +15,7 @@
   </PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Release'">
-		<PackageReference Include="MH.UI.WPF" Version="3.0.0" />
+		<PackageReference Include="MH.UI.WPF" Version="[3.0.0,4.0.0)" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Debug'">
