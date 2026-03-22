@@ -116,7 +116,7 @@ public class ImportS {
       if (!Path.Exists(filePath))
         await Net.DownloadAndSaveFile(image.Url, filePath);
 
-      return _coreS.PMCoreS.MediaItem.GetMediaItem(folder, fileName);
+      return await _coreS.PMCoreS.MediaItem.GetMediaItem(folder, fileName);
     }
     catch (Exception ex) {
       Log.Error(ex);
