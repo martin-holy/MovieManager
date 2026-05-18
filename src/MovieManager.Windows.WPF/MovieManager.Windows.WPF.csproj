@@ -9,13 +9,13 @@
 		<Company>Martin Holý</Company>
 		<Copyright>Martin Holý</Copyright>
 
-		<Version>1.4.0</Version>
-		<AssemblyVersion>1.4.0.0</AssemblyVersion>
-		<FileVersion>1.4.0.0</FileVersion>
+		<Version>1.4.1</Version>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.4.1.0</FileVersion>
   </PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Release'">
-		<PackageReference Include="MH.UI.WPF" Version="4.0.0" />
+		<PackageReference Include="MH.UI.WPF" Version="4.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Debug'">
