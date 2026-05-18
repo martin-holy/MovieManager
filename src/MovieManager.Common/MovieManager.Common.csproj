@@ -8,13 +8,13 @@
 		<Company>Martin Holý</Company>
 		<Copyright>Martin Holý</Copyright>
 
-		<Version>1.4.0</Version>
-		<AssemblyVersion>1.4.0.0</AssemblyVersion>
-		<FileVersion>1.4.0.0</FileVersion>
+		<Version>1.4.1</Version>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.4.1.0</FileVersion>
   </PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Release'">
-		<PackageReference Include="MH.UI" Version="5.0.0" />
+		<PackageReference Include="MH.UI" Version="5.1.1" />
 		<PackageReference Include="MH.Utils" Version="4.0.0" />
 	</ItemGroup>
 
