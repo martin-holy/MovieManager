@@ -28,9 +28,9 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\PictureManager\src\PictureManager.Common\PictureManager.Common.csproj">
-      <Private>False</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\PictureManager.Common\src\PictureManager.Common\PictureManager.Common.csproj">
+			<Private>False</Private>
+		</ProjectReference>
     <ProjectReference Include="..\..\plugins\src\MovieManager.Plugins.Common\MovieManager.Plugins.Common.csproj">
       <Private>False</Private>
     </ProjectReference>
