@@ -1,4 +1,4 @@
-﻿using MH.Utils.BaseClasses;
+﻿using MH.Utils.DB.Repositories;
 using PictureManager.Common.Features.MediaItem;
 using PictureManager.Common.Features.Person;
 using System;
@@ -7,29 +7,14 @@ using PM = PictureManager.Common;
 
 namespace MovieManager.Common.Features.Actor;
 
-/// <summary>
-/// DB fields: Id|Name|Person|Image
-/// </summary>
-public class ActorR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<ActorM>(coreR, "Actors", 4) {
-  public static ActorM Dummy { get; } = new(0, string.Empty);
-  public event EventHandler<ActorM> ActorPersonChangedEvent = delegate { };
+public sealed class ActorR : Repository<ActorM> {
+  public ActorDS DataSource { get; }
 
-  protected override ActorM _fromCsv(string[] csv) =>
-    new(int.Parse(csv[0]), csv[1]);
-
-  protected override string _toCsv(ActorM item) =>
-    string.Join("|",
-      item.GetHashCode().ToString(),
-      item.Name,
-      item.Person?.GetHashCode().ToString(),
-      item.Image?.GetHashCode().ToString());
-
-  public override void LinkReferences() {
-    foreach (var (item, csv) in _allCsv) {
-      item.Person = pmCoreR.Person.GetById(csv[2], true);
-      item.Image = pmCoreR.MediaItem.GetById(csv[3], true);
-    }
+  public ActorR(CoreR coreR, PM.CoreR pmCoreR) {
+    DataSource = new(coreR, pmCoreR, this);
   }
+
+  public event EventHandler<ActorM> ActorPersonChangedEvent = delegate { };
 
   public ActorM ItemCreate(string name) =>
     ItemCreate(new ActorM(GetNextId(), name));

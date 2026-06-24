@@ -54,7 +54,7 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
     ImportMoviesCommand = new(OpenImportMovies, PM.Res.IconImport, "Import");
     OpenMoviesCommand = new(OpenMovies, MH.UI.Res.IconMovieClapper, "Movies");
     OpenMoviesFilterCommand = new(OpenMoviesFilter, PM.Res.IconFilter, "Movies filter");
-    SaveDbCommand = new(() => _coreR.SaveAllTables(), () => _coreR.Changes > 0, PM.Res.IconDatabase, "Save changes");
+    SaveDbCommand = new(_coreR.DB.SaveAll, () => _coreR.DB.Changes > 0, PM.Res.IconDatabase, "Save changes");
     ScrollToRootFolderCommand = new(() => _coreR.PMCoreR.Folder.Tree.Category.ScrollTo(_coreR.RootFolder), PM.Res.IconFolder, "Scroll to root folder");
 
     MainMenuCommands = [
@@ -127,15 +127,15 @@ public sealed class CoreVM : ObservableObject, IPluginCoreVM {
   }
 
   private async Task OnAppClosing() {
-    if (_coreR.Changes > 0 &&
+    if (_coreR.DB.Changes > 0 &&
         await Dialog.ShowAsync(new MessageDialog(
           "Database changes",
           "There are some changes in Movie Manager database.\nDo you want to save them?",
           PM.Res.IconDatabase,
           true)) == 1)
-      _coreR.SaveAllTables();
+      _coreR.DB.SaveAll();
 
-    _coreR.BackUp();
+    _coreR.DB.BackUp();
   }
 
   private async Task DeleteSelectedMovies(CancellationToken token) {

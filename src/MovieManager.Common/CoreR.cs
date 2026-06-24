@@ -15,9 +15,11 @@ using PM = PictureManager.Common;
 
 namespace MovieManager.Common;
 
-public sealed class CoreR : SimpleDB {
+public sealed class CoreR {
   public readonly PM.CoreR PMCoreR;
   private readonly Core _core;
+
+  public MH.Utils.DB.SimpleDB DB { get; }
 
   public ActorR Actor { get; }
   public ActorDetailIdR ActorDetailId { get; }
@@ -31,9 +33,11 @@ public sealed class CoreR : SimpleDB {
   public FolderM? PostersFolder { get; set; }
   public FolderM? RootFolder { get; set; }
 
-  public CoreR(PM.CoreR pmCoreR, Core core) : base(Path.Combine(core.BaseDir, "db")) {
+  public CoreR(PM.CoreR pmCoreR, Core core) {
     PMCoreR = pmCoreR;
     _core = core;
+
+    DB = new(Path.Combine(core.BaseDir, "db"));
 
     Actor = new(this, pmCoreR);
     ActorDetailId = new(this);
@@ -43,13 +47,13 @@ public sealed class CoreR : SimpleDB {
     Movie = new(this, pmCoreR);
   }
 
-  public void AddDataAdapters() {
-    AddTableDataAdapter(Actor);
-    AddTableDataAdapter(ActorDetailId);
-    AddTableDataAdapter(Genre);
-    AddTableDataAdapter(Character);
-    AddTableDataAdapter(MovieDetailId);
-    AddTableDataAdapter(Movie);
+  public void AddDataSources() {
+    DB.AddRepositoryDataSource(Actor.DataSource);
+    DB.AddRepositoryDataSource(ActorDetailId.DataSource);
+    DB.AddRepositoryDataSource(Genre.DataSource);
+    DB.AddRepositoryDataSource(Character.DataSource);
+    DB.AddRepositoryDataSource(MovieDetailId.DataSource);
+    DB.AddRepositoryDataSource(Movie.DataSource);
   }
 
   public void AttachEvents() {

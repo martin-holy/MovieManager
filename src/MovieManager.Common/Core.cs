@@ -42,14 +42,15 @@ public sealed class Core : IPluginCore {
     R = new(pmCoreR, this);
 
     return Task.Run(() => {
-      R.AddDataAdapters();
+      R.AddDataSources();
       progress.Report("Migrating MovieManager Database");
-      R.Migrate(0, DatabaseMigration.Resolver);
-      R.LoadAllTables(progress);
-      R.LinkReferences(progress);
-      LoadPlugins(progress);
-      R.ClearDataAdapters();
-      R.SetIsReady();
+      R.DB.Migrate(0, DatabaseMigration.Resolver);
+      R.DB.LoadAll(progress);
+      R.DB.LinkReferences(progress);
+      R.DB.LinkProps(progress);
+      R.DB.FillRepositories();
+      R.DB.ClearDataSources();
+      R.DB.SetIsReady();
     });
   }
 

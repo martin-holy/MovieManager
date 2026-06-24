@@ -1,62 +1,28 @@
 ﻿using MH.Utils;
 using MH.Utils.BaseClasses;
+using MH.Utils.DB.Repositories;
 using MH.Utils.Extensions;
 using MovieManager.Plugins.Common.DTOs;
 using PictureManager.Common.Features.Keyword;
 using PictureManager.Common.Features.MediaItem;
 using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using PM = PictureManager.Common;
 
 namespace MovieManager.Common.Features.Movie;
 
-/// <summary>
-/// DB fields: Id|Title|Year|YearEnd|Length|Rating|MyRating|Genres|MPAA|Seen|Poster|MediaItems|Keywords|Plot
-/// </summary>
-public sealed class MovieR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<MovieM>(coreR, "Movies", 14) {
-  public static MovieM Dummy { get; } = new(0, string.Empty);
+public sealed class MovieR : Repository<MovieM> {
+  private readonly CoreR _coreR;
+
+  public MovieDS DataSource { get; }
+
+  public MovieR(CoreR coreR, PM.CoreR pmCoreR) {
+    _coreR = coreR;
+    DataSource = new(coreR, pmCoreR, this);
+  }
+
   public event EventHandler<MovieM[]> MoviesKeywordsChangedEvent = delegate { };
   public event EventHandler<MovieM> PosterChangedEvent = delegate { };
-
-  protected override MovieM _fromCsv(string[] csv) =>
-    new(int.Parse(csv[0]), csv[1]) {
-      Year = csv[2].IntParseOrDefault(0),
-      YearEnd = string.IsNullOrEmpty(csv[3]) ? null : int.Parse(csv[3]),
-      Length = csv[4].IntParseOrDefault(0),
-      Rating = csv[5].IntParseOrDefault(0) / 10.0,
-      MyRating = csv[6].IntParseOrDefault(0) / 10.0,
-      MPAA = string.IsNullOrEmpty(csv[8]) ? null : csv[8],
-      Seen = string.IsNullOrEmpty(csv[9]) ? [] : new ObservableCollection<DateOnly>(csv[9].Split(',').Select(x => DateOnly.ParseExact(x, "yyyyMMdd", CultureInfo.InvariantCulture))),
-      Plot = string.IsNullOrEmpty(csv[13]) ? null : csv[13]
-    };
-
-  protected override string _toCsv(MovieM item) =>
-    string.Join("|",
-      item.GetHashCode().ToString(),
-      item.Title,
-      item.Year.ToString(),
-      item.YearEnd?.ToString(),
-      item.Length.ToString(),
-      ((int)(item.Rating * 10)).ToString(),
-      ((int)(item.MyRating * 10)).ToString(),
-      item.Genres.ToHashCodes().ToCsv(),
-      item.MPAA,
-      item.Seen.Select(x => x.ToString("yyyyMMdd", CultureInfo.InvariantCulture)).ToCsv(),
-      item.Poster?.GetHashCode().ToString(),
-      item.MediaItems?.ToHashCodes().ToCsv(),
-      item.Keywords?.ToHashCodes().ToCsv(),
-      item.Plot);
-
-  public override void LinkReferences() {
-    foreach (var (item, csv) in _allCsv) {
-      item.Genres = coreR.Genre.LinkList(csv[7], null, this) ?? [];
-      item.Poster = pmCoreR.MediaItem.GetById(csv[10], true);
-      item.MediaItems = pmCoreR.MediaItem.Link(csv[11]);
-      item.Keywords = pmCoreR.Keyword.Link(csv[12], this);
-    }
-  }
 
   public MovieM ItemCreate(MovieDetail md) {
     var item = ItemCreate(new MovieM(GetNextId(), md.Title) {
@@ -69,7 +35,7 @@ public sealed class MovieR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<Mov
     });
 
     item.Genres = md.Genres?
-      .Select(x => coreR.Genre.GetGenre(x, true))
+      .Select(x => _coreR.Genre.GetGenre(x, true))
       .Where(x => x != null)
       .Select(x => x!)
       .ToList() ?? [];

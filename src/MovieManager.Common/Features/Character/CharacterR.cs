@@ -1,4 +1,4 @@
-﻿using MH.Utils.BaseClasses;
+﻿using MH.Utils.DB.Repositories;
 using MovieManager.Common.Features.Actor;
 using MovieManager.Common.Features.Movie;
 using PictureManager.Common.Features.Segment;
@@ -7,27 +7,11 @@ using PM = PictureManager.Common;
 
 namespace MovieManager.Common.Features.Character;
 
-/// <summary>
-/// DB fields: Id|Name|Actor|Movie|Segment
-/// </summary>
-public class CharacterR(CoreR coreR, PM.CoreR pmCoreR) : TableDataAdapter<CharacterM>(coreR, "Characters", 5) {
-  protected override CharacterM _fromCsv(string[] csv) =>
-    new(int.Parse(csv[0]), csv[1], ActorR.Dummy, MovieR.Dummy);
+public sealed class CharacterR : Repository<CharacterM> {
+  public CharacterDS DataSource { get; }
 
-  protected override string _toCsv(CharacterM item) =>
-    string.Join("|",
-      item.GetHashCode().ToString(),
-      item.Name,
-      item.Actor.GetHashCode().ToString(),
-      item.Movie.GetHashCode().ToString(),
-      item.Segment?.GetHashCode().ToString());
-
-  public override void LinkReferences() {
-    foreach (var (item, csv) in _allCsv) {
-      item.Actor = coreR.Actor.GetById(csv[2])!;
-      item.Movie = coreR.Movie.GetById(csv[3])!;
-      item.Segment = pmCoreR.Segment.GetById(csv[4], true);
-    }
+  public CharacterR(CoreR coreR, PM.CoreR pmCoreR) {
+    DataSource = new(coreR, pmCoreR, this);
   }
 
   public CharacterM ItemCreate(string name, ActorM actor, MovieM movie) =>
