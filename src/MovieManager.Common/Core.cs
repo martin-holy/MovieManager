@@ -49,6 +49,7 @@ public sealed class Core : IPluginCore {
       R.DB.LinkReferences(progress);
       R.DB.LinkProps(progress);
       R.DB.FillRepositories();
+      LoadPlugins(progress);
       R.DB.ClearDataSources();
       R.DB.SetIsReady();
     });
