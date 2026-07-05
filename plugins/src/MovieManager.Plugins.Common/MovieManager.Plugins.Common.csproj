@@ -14,7 +14,7 @@
   </PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Release'">
-		<PackageReference Include="MH.Utils" Version="5.0.0" />
+		<PackageReference Include="MH.Utils" Version="5.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='Debug'">
